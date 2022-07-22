@@ -1,7 +1,7 @@
 # MPD_Playlists
-A bash script to generate a range random playlists for MPD, https://www.musicpd.org/. Playlists created include by genre, decade, recently added and so forth.
+A bash script to generate a range of random playlists for MPD, https://www.musicpd.org/. 
 
-This is a bash script to generate the following playlists. 
+This is a commented bash script to generate the following playlists. 
 
 1) a random list of 20 songs for each genre
 2) all tracks by a random Artist
@@ -10,15 +10,11 @@ This is a bash script to generate the following playlists.
 5) all tracks added recently (as determined by the RECENT variable, last 50 days)
 6) random playlists based on the decade a recording was released
 
-It uses MPC and some common linux text processing tools like awk and sed to create the playlists from the embedded tags in you music files. Obviously, it assumes that you have tagged your music collection. 
+It uses MPC and some common linux text processing tools like awk, sed and shuf to create the playlists from the embedded tags in you music files. These are generally installed by default for most Linux distributions, or are in your distributions package manager. 
 
-I personally use beets to tag my music, https://beets.io/. It does a great job, but is quite technical and labour intensive. 
+Obviously, it assumes that you have tagged your music collection. I personally use beets to tag my music, https://beets.io/. It does a great job, but is quite technical and labour intensive. 
 
-Tags I used:
-Album
-Genre
-AlbumArtist
-originaldate
+Tags I used: Album, Genre, AlbumArtist, originaldate
 
 if your collection does not populate those tags, you can substitute them for your own tags. eg Artist for AlbumArtist and Date for OriginalDate.
 
