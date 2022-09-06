@@ -1,4 +1,3 @@
-cat script/mpc_playlists.sh 
 #!/bin/bash
 #this script is designed to run daily (see cron).
 #It uses mpc to create the following play lists
@@ -65,7 +64,7 @@ RECENT=$(date --date="50 days ago" +"%Y%m%d")
 #    mpc save "t-$line";
 #done
 
-#create one genre play list per genre in the form "s-genre". eg s-folk
+#create one genre play list per genre in the form "s-genre". eg t-folk
 
 mpc list Genre | tr ";/" "\n" | sed 's/^ *//g' | awk NF | sort -u | while read -r LINE; do
     mpc rm "t-$LINE";
@@ -84,7 +83,7 @@ mpc clear
 mpc findadd AlbumArtist "$(mpc list AlbumArtist | shuf -n 1)"
 mpc save "s-FeaturedArtist"
 
-#Artist if the day - find songs of a random artist:
+#Album of the day - finds a random album:
 
 mpc rm "s-FeaturedAlbum"
 mpc clear
@@ -109,9 +108,9 @@ mpc save "s-Recent"
 #make random decade lists
 
 # this lists all dates (yyyy0mm-dd)
-#removes blank lines - awk NF
-#grabs the first 3 numbers of the originaldate (eg 196 for the sixties) - should be the original release date as set by beets
-#removes any 000 dates
+# removes blank lines - awk NF
+# grabs the first 3 numbers of the originaldate (eg 196 for the sixties) - should be the original release date as set by beets
+# removes any 000 dates
 # sorts for unique numbers and created the lists eg y-1960's
 
 mpc list originaldate | awk NF | cut -c1-3 | awk '!/000/' | sort -u | while read -r LINE; do
