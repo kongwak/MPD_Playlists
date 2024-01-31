@@ -9,7 +9,12 @@
 #Written by Richard
 #19 Feb 2022
 #Added decade playlists Apr 2022
-# 6) random playlists form decade a recording is released
+# 6) random playlists from decade a recording is released
+#Nov 2023
+#limited Genre playlist creation to genres with more than 50 items
+#Dec 2023
+# 7)Create a Christmas playlist in December only
+
 #Global declaration
 
 # find the date 50 days ago in iso 8601 format (YYYYmmdd - 20220219)
@@ -66,11 +71,29 @@ RECENT=$(date --date="50 days ago" +"%Y%m%d")
 
 #create one genre play list per genre in the form "s-genre". eg t-folk
 
+#mpc list Genre | tr ";/" "\n" | sed 's/^ *//g' | awk NF | sort -u | while read -r LINE; do
+#    mpc rm "t-$LINE";
+#    mpc clear;
+#    mpc search "(Genre contains \"$LINE\")" | shuf -n 20 | mpc add;
+#    mpc save "t-$LINE";
+#done
+
+#create one genre play list per genre in the form "t-genre". eg t-folk. Discard any Genre with less than 50 tracks
+#to stop creating a vast number of small play lists
+
 mpc list Genre | tr ";/" "\n" | sed 's/^ *//g' | awk NF | sort -u | while read -r LINE; do
     mpc rm "t-$LINE";
-    mpc clear;
-    mpc search "(Genre contains \"$LINE\")" | shuf -n 20 | mpc add;
-    mpc save "t-$LINE";
+    # count the lines in a full genre play list
+    GLONG=$(mpc search "(Genre contains \"$LINE\")" | wc -l)
+#    echo $LINE " has " $GLONG " tracks";
+    if [ $GLONG -gt 50 ]; then
+#        echo "Nice Length for a playlist";
+        mpc clear; 
+        mpc search "(Genre contains \"$LINE\")" | shuf -n 20 | mpc add;
+        mpc save "t-$LINE";
+#    else
+#        echo "Too few songs in Genre to create playlist"
+    fi
 done
 
 #Artist of the day - find songs of a random artist
@@ -97,13 +120,20 @@ mpc clear
 mpc listall | shuf -n 50 | mpc add
 mpc save "s-Daily"
 
-
 #music added RECENTlY
 
 mpc rm "s-Recent"
 mpc clear
 mpc searchadd "(modified-since \"$RECENT\")"
 mpc save "s-Recent"
+
+#Christmas playlist in December only
+mpc rm "s-Christmas"
+if [ $(date +%B)  == "December" ]; then
+        mpc clear
+        mpc searchadd '(any contains "Christmas")'
+        mpc save "s-Christmas"
+fi
 
 #make random decade lists
 
@@ -119,7 +149,6 @@ mpc list originaldate | awk NF | cut -c1-3 | awk '!/000/' | sort -u | while read
         mpc search "(originaldate contains \"$LINE\")" | shuf -n 20 | mpc add;
         mpc save "y-${LINE}0's";
 done
-
 
 
 mpc clear
