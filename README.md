@@ -9,6 +9,7 @@ This is a commented bash script to generate the following playlists.
 1. a random list of 50 songs
 1. all tracks added recently (as determined by the RECENT variable, last 50 days)
 1. random playlists based on the decade a recording was released
+1. a christmas themed playlist created in December only 
 
 It uses MPC (https://www.musicpd.org/clients/mpc/) and some common linux text processing tools like awk, sed and shuf to create the playlists from the embedded tags in you music files. These are generally installed by default for most Linux distributions, or are in your distributions package manager. 
 
